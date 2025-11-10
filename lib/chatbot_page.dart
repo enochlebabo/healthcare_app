@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http; // Import for API calls
 const String GEMINI_API_KEY = "AIzaSyAmHJlHgnAo0m9fUNf_xUSOFFJby8SuiNU"; // <-- YOUR KEY IS NOW HERE!
 
 // --- Color and Style Definitions ---
-const Color primaryBlue = Color.fromARGB(255, 123, 170, 224);
+const Color primaryBlue = Color.fromARGB(255, 85, 154, 233);
 const Color accentGreen = Color(0xFF38A169);
 
 // Define the structure of a message
@@ -39,8 +39,8 @@ class ChatBotProvider extends ChangeNotifier {
   final List<String> examplePrompts = [
     "How does deep learning detect diabetic retinopathy?",
     "Explain the symptoms of Age-related Macular Degeneration (AMD).",
-    "What are Drusen and why are they important in diagnosis?",
-    "What is Glaucoma and how is it related to the retina?"
+    // "What are Drusen and why are they important in diagnosis?",
+    // "What is Glaucoma and how is it related to the retina?"
   ];
 
   Future<void> handleSend(String promptText) async {
@@ -123,7 +123,7 @@ class ChatBotPage extends StatelessWidget {
           color: Colors.white,
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
+              constraints: const BoxConstraints(maxWidth: 700),
               child: const Column(
                 children: [
                   Expanded(child: MessageList()),
@@ -294,7 +294,7 @@ class BotLoadingIndicator extends StatelessWidget {
                 SizedBox(width: 8),
                 SizedBox(
                   width: 10,
-                  height: 10,
+                  height: 5,
                   child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(primaryBlue)),
                 ),
               ],
@@ -332,8 +332,8 @@ class _ChatInputAreaState extends State<ChatInputArea> {
         children: [
           // Example Prompts
           Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
+            spacing: 1.0,
+            runSpacing: 1.0,
             children: chatBot.examplePrompts.map((prompt) {
               return ActionChip(
                 label: Text(prompt, style: TextStyle(color: isLoading ? Colors.grey : primaryBlue)),
@@ -389,7 +389,7 @@ class _ChatInputAreaState extends State<ChatInputArea> {
                       : primaryBlue,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   elevation: 0,
-                  child: const Icon(Icons.send, color: Colors.white, size: 24),
+                  child: const Icon(Icons.send, color: Colors.white, size: 15),
                 ),
               ),
             ],
@@ -411,7 +411,7 @@ class _ChatInputAreaState extends State<ChatInputArea> {
                 Expanded(
                   child: Text(
                     'Medical Disclaimer: This AI assistant is for informational purposes only and is not a substitute for professional medical advice.',
-                    style: TextStyle(color: Colors.amber.shade800, fontSize: 12),
+                    style: TextStyle(color: Colors.amber.shade800, fontSize: 8),
                   ),
                 ),
               ],

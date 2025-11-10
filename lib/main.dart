@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'chatbot_page.dart'; 
 import 'appointment_model.dart';
-import 'book_appointment_page.dart';
 import 'provider_dashboard.dart';
 import 'patient_dashboard.dart'; 
 import 'profile_setup_page.dart'; 
@@ -151,48 +150,44 @@ class LandingPage extends StatelessWidget {
 
   PreferredSizeWidget _buildHeader(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
       toolbarHeight: 80,
       title: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Icon(Icons.remove_red_eye_outlined, color: primaryBlue, size: 36),
-          const SizedBox(width: 8),
-          RichText(
-            text: const TextSpan(
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: primaryBlue,
+          // Logo and Title
+          Row(
+            children: [
+              const Icon(Icons.remove_red_eye_outlined, color: primaryBlue, size: 36),
+              const SizedBox(width: 10),
+              RichText(
+                text: const TextSpan(
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: primaryBlue,
+                    letterSpacing: 1.2,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Retinal-'),
+                    TextSpan(text: 'AI', style: TextStyle(color: accentGreen)),
+                  ],
+                ),
               ),
-              children: <TextSpan>[
-                TextSpan(text: 'Retinal-'),
-                TextSpan(text: 'AI', style: TextStyle(color: accentGreen)),
-              ],
+            ],
+          ),
+          // Actions: Only Login icon
+          Tooltip(
+            message: 'Login',
+            child: IconButton(
+              icon: const Icon(Icons.login, color: primaryBlue, size: 30),
+              onPressed: () => Navigator.of(context).pushNamed('/sign_in'),
             ),
           ),
         ],
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: TextButton(
-            onPressed: () => Navigator.of(context).pushNamed('/sign_in'),
-            child: const Text('Login', style: TextStyle(color: primaryBlue)),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 16.0),
-          child: ElevatedButton(
-            onPressed: () => Navigator.of(context).pushNamed('/sign_in'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            ),
-            child: const Text('Sign Up'),
-          ),
-        ),
-      ],
-      // Add a subtle bottom border as seen in the image
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
         child: Container(color: Colors.grey[300], height: 1.0),
@@ -200,74 +195,98 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  // ... (Other sections like _buildHeroSection and _buildFeatureSection remain the same) ...
-
   Widget _buildHeroSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Chip(
           label: const Text(
             'Medical Grade AI',
-            style: TextStyle(color: accentGreen, fontWeight: FontWeight.bold, fontSize: 12),
+            style: TextStyle(
+              color: accentGreen,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              letterSpacing: 0.5,
+            ),
           ),
           backgroundColor: accentGreen.withOpacity(0.1),
           side: BorderSide.none,
-          avatar: const Icon(Icons.verified_outlined, color: accentGreen, size: 16),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          avatar: const Icon(Icons.verified_outlined, color: accentGreen, size: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 28),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
             style: TextStyle(
               fontFamily: 'Inter',
-              fontSize: 50,
+              fontSize: isMobile ? 38 : 54,
               fontWeight: FontWeight.w900,
-              color: primaryBlue.withOpacity(0.9),
-              height: 1.1,
+              color: primaryBlue.withOpacity(0.95),
+              height: 1.15,
+              letterSpacing: 1.1,
             ),
             children: const <TextSpan>[
-              TextSpan(text: 'AI-Powered Retinal Health at Your \n'),
-              TextSpan(text: 'Fingertips', style: TextStyle(color: accentGreen)),
+              TextSpan(text: 'AI-Powered Retinal Health\n'),
+              TextSpan(text: 'at Your Fingertips', style: TextStyle(color: accentGreen)),
             ],
           ),
         ),
-        const SizedBox(height: 24),
-        const Text(
-          'Advanced deep learning technology for early detection of diabetic retinopathy, glaucoma, AMD, and other retinal conditions. Trusted by healthcare professionals worldwide.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18,
-            color: Color(0xFF4A5568),
-            height: 1.5,
+        const SizedBox(height: 28),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            'Advanced deep learning for early detection of diabetic retinopathy, glaucoma, AMD, and more. Trusted by healthcare professionals worldwide.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Color(0xFF4A5568),
+              height: 1.5,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+            ),
           ),
         ),
-        const SizedBox(height: 36),
+        const SizedBox(height: 32),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
+            ElevatedButton.icon(
+              icon: const Icon(Icons.chat_bubble_outline),
               onPressed: () {
-                // Link 'Start Analysis' to the ChatBotPage
                 Navigator.of(context).pushNamed('/chat_bot');
               },
-              child: const Text('Chatbot analysis'),
+              label: const Text('Chatbot Analysis'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
+                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
             ),
             const SizedBox(width: 16),
-            OutlinedButton(
+            OutlinedButton.icon(
+              icon: const Icon(Icons.info_outline),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const AboutPage()),
                 );
               },
-              child: const Text('About'),
+              label: const Text('About'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+                textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                side: const BorderSide(color: accentGreen, width: 2),
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 36),
+        const SizedBox(height: 32),
         const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -276,13 +295,13 @@ class LandingPage extends StatelessWidget {
               text: 'HIPAA Compliant',
               color: accentGreen,
             ),
-            SizedBox(width: 20),
+            SizedBox(width: 18),
             _ComplianceBadge(
               icon: Icons.shield_outlined,
               text: 'FDA Guidelines',
               color: primaryBlue,
             ),
-            SizedBox(width: 20),
+            SizedBox(width: 18),
             _ComplianceBadge(
               icon: Icons.star_border,
               text: '',
@@ -295,40 +314,50 @@ class LandingPage extends StatelessWidget {
   }
 
   Widget _buildFeatureSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 80),
+        const SizedBox(height: 20),
         const Text(
           'Advanced Medical AI Diagnostic Features',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 32,
+            fontSize: 14,
             fontWeight: FontWeight.w800,
             color: primaryBlue,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         const Text(
           'Our cutting-edge technology combines GPT-4.1 Vision with specialized medical AI to deliver professional-grade retinal analysis with unparalleled accuracy.',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 10,
             color: Color(0xFF4A5568),
             height: 1.5,
           ),
         ),
         const SizedBox(height: 60),
         Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(50),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: const Icon(
             Icons.camera_alt,
             color: primaryBlue,
-            size: 40,
+            size: 48,
           ),
         ),
         const SizedBox(height: 80),
@@ -690,7 +719,7 @@ class _SignInPageState extends State<SignInPage> {
                     prefixIcon: const Icon(Icons.security, color: primaryBlue),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  value: _selectedRole,
+                  initialValue: _selectedRole,
                   items: UserRole.values.map((role) {
                     return DropdownMenuItem(
                       value: role,
@@ -738,7 +767,7 @@ class _SignInPageState extends State<SignInPage> {
                     onPressed: _showForgotPasswordDialog,
                     child: const Text(
                       'Forgot Password?',
-                      style: TextStyle(color: primaryBlue, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: Color.fromARGB(255, 243, 4, 4), fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -768,7 +797,7 @@ class _SignInPageState extends State<SignInPage> {
                     TextButton(
                       onPressed: _isLoading ? null : () => _launchURL(signupUrl),
                       child: const Text(
-                        "Sign up as Patient",
+                        "Patient Signup ",
                         style: TextStyle(color: primaryBlue, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -776,8 +805,8 @@ class _SignInPageState extends State<SignInPage> {
                     // NEW: Doctor Registration Button
                     ElevatedButton.icon(
                       onPressed: _isLoading ? null : _signUpAsProvider,
-                      icon: const Icon(Icons.medical_services, size: 18),
-                      label: const Text("Register as Doctor"),
+                      icon: const Icon(Icons.medical_services, size: 15),
+                      label: const Text("Reg as Doctor"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: accentGreen,
                         foregroundColor: Colors.white,
